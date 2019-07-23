@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using mvcWithAuth.Data;
 
 namespace testWebAPIFB.Controllers
 {
@@ -16,9 +17,9 @@ namespace testWebAPIFB.Controllers
     {
 
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        public ValuesController(IHttpContextAccessor contextAccessor, UserManager<IdentityUser> userManager)
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        public ValuesController(IHttpContextAccessor contextAccessor, UserManager<ApplicationUser> userManager)
         {
 
             _contextAccessor = contextAccessor;
@@ -37,8 +38,9 @@ namespace testWebAPIFB.Controllers
 
             if (await _userManager.FindByNameAsync(name) == null)
             {
-                var user = new IdentityUser(name);
+                var user = new ApplicationUser(name);
                 user.Email = "fsdfas@fsda.org";
+                user.customField = "haha";
                 await _userManager.CreateAsync(user);
             }
             return new string[] { name, "value1", "value2" };

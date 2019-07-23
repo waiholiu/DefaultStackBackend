@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using mvcWithAuth.Data;
 
 namespace mvcWithAuth.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190723122137_applicationuser")]
+    partial class applicationuser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,13 +182,9 @@ namespace mvcWithAuth.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ApplicationUserId");
-
                     b.Property<string>("name");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Pineapples");
                 });
@@ -234,13 +232,6 @@ namespace mvcWithAuth.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("mvcWithAuth.Data.Pineapple", b =>
-                {
-                    b.HasOne("mvcWithAuth.Data.ApplicationUser", "ApplicationUser")
-                        .WithMany("Pineapples")
-                        .HasForeignKey("ApplicationUserId");
                 });
 #pragma warning restore 612, 618
         }

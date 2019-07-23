@@ -32,7 +32,7 @@ namespace mvcWithAuth
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(
+    options.UseSqlServer(
         Configuration.GetConnectionString("DefaultConnection")));
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -57,7 +57,7 @@ namespace mvcWithAuth
                         ValidateLifetime = true
                     };
                 });
-            services.AddIdentityCore<IdentityUser>()
+            services.AddIdentityCore<ApplicationUser>()
                    .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
