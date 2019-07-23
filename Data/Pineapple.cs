@@ -9,6 +9,7 @@ namespace mvcWithAuth.Data
     {
 
         [Key]
+        [DatabaseGenerated( DatabaseGeneratedOption.Identity)]
         public int Id {set; get;}
         public string name{set;get;}
 

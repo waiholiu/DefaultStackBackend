@@ -41,7 +41,16 @@ namespace testWebAPIFB.Controllers
                 var user = new ApplicationUser(name);
                 user.Email = "fsdfas@fsda.org";
                 user.customField = "haha";
+
+                var newPineapple = new Pineapple() {
+                    name = "random name of things " + name
+                };
+                user.Pineapples = new List<Pineapple>();
+                user.Pineapples.Add(newPineapple);
                 await _userManager.CreateAsync(user);
+
+
+
             }
             return new string[] { name, "value1", "value2" };
         }
