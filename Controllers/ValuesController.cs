@@ -19,12 +19,14 @@ namespace testWebAPIFB.Controllers
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
-        public ValuesController(IHttpContextAccessor contextAccessor, UserManager<ApplicationUser> userManager)
+
+        private readonly ApplicationDbContext db;
+        public ValuesController(IHttpContextAccessor contextAccessor, UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext)
         {
 
             _contextAccessor = contextAccessor;
             _userManager = userManager;
-
+            db = dbContext;
         }
 
 
@@ -34,7 +36,10 @@ namespace testWebAPIFB.Controllers
         {
             var name = _contextAccessor.HttpContext.User.Claims.First(c => c.Type == "user_id").Value;
 
-
+            var newPine = new Pineapple();
+            newPine.name = "my new pineapple";
+            db.Pineapples.Add(newPine);
+            db.SaveChanges();
 
             if (await _userManager.FindByNameAsync(name) == null)
             {
@@ -42,7 +47,8 @@ namespace testWebAPIFB.Controllers
                 user.Email = "fsdfas@fsda.org";
                 user.customField = "haha";
 
-                var newPineapple = new Pineapple() {
+                var newPineapple = new Pineapple()
+                {
                     name = "random name of things " + name
                 };
                 user.Pineapples = new List<Pineapple>();
