@@ -71,6 +71,24 @@ namespace mvcWithAuth
 
                             // retrieves the roles that the user has
                             ApplicationUser user = await _userManager.FindByNameAsync(name);
+
+                            if (user == null)
+                            {
+                                user = new ApplicationUser(name);
+                                user.Email = "fsdfas@fsda.org";
+                                user.customField = "haha";
+
+                                var newPineapple = new Pineapple()
+                                {
+                                    name = "random name of things " + name
+                                };
+                                user.Pineapples = new List<Pineapple>();
+                                user.Pineapples.Add(newPineapple);
+                                var result = await _userManager.CreateAsync(user);
+                                var roleResult = await _userManager.AddToRoleAsync(user, "admin");
+
+                            }
+
                             var userRoles = await _userManager.GetRolesAsync(user);
 
                             // adds the role as a new claim 

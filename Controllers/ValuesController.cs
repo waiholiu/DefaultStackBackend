@@ -12,7 +12,7 @@ namespace testWebAPIFB.Controllers
 {
     [Route("api/[controller]")]
     // [Authorize]
-    [Authorize(Roles = "admin2")]
+    [Authorize(Roles = "admin")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
@@ -59,26 +59,8 @@ namespace testWebAPIFB.Controllers
 
             ApplicationUser user = await _userManager.FindByNameAsync(name);
 
-            if (user == null)
-            {
-                user = new ApplicationUser(name);
-                user.Email = "fsdfas@fsda.org";
-                user.customField = "haha";
-
-                var newPineapple = new Pineapple()
-                {
-                    name = "random name of things " + name
-                };
-                user.Pineapples = new List<Pineapple>();
-                user.Pineapples.Add(newPineapple);
-                var result = await _userManager.CreateAsync(user);
-                var roleResult = await _userManager.AddToRoleAsync(user, "admin");
-
-
-            }
-
             // await _signInManager.SignInAsync(user,true);
-            return new string[] { name, "value1", "value2" };
+            return new string[] { user.Email, "value1", "value2" };
         }
 
         // GET api/values/5
