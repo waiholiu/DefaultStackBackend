@@ -11,7 +11,8 @@ using mvcWithAuth.Data;
 namespace testWebAPIFB.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    // [Authorize]
+    [Authorize(Roles = "admin2")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
@@ -20,18 +21,22 @@ namespace testWebAPIFB.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
 
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext db;
-        public ValuesController(IHttpContextAccessor contextAccessor, UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext)
+        public ValuesController(RoleManager<IdentityRole> rm, IHttpContextAccessor contextAccessor, SignInManager<ApplicationUser> signInMgt, UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext)
         {
 
             _contextAccessor = contextAccessor;
             _userManager = userManager;
+            _signInManager = signInMgt;
+            _roleManager = rm;
             db = dbContext;
         }
 
 
         // GET api/values
         [HttpGet]
+        
         public async Task<ActionResult<IEnumerable<string>>> GetAsync()
         {
             var name = _contextAccessor.HttpContext.User.Claims.First(c => c.Type == "user_id").Value;
@@ -41,9 +46,22 @@ namespace testWebAPIFB.Controllers
             db.Pineapples.Add(newPine);
             db.SaveChanges();
 
-            if (await _userManager.FindByNameAsync(name) == null)
+            var role = "admin";
+            if (!await _roleManager.RoleExistsAsync(role))
             {
-                var user = new ApplicationUser(name);
+                var create = await _roleManager.CreateAsync(new IdentityRole(role));
+
+                if (!create.Succeeded)
+                {
+                    throw new Exception("Failed to create role");
+                }
+            }
+
+            ApplicationUser user = await _userManager.FindByNameAsync(name);
+
+            if (user == null)
+            {
+                user = new ApplicationUser(name);
                 user.Email = "fsdfas@fsda.org";
                 user.customField = "haha";
 
@@ -53,11 +71,13 @@ namespace testWebAPIFB.Controllers
                 };
                 user.Pineapples = new List<Pineapple>();
                 user.Pineapples.Add(newPineapple);
-                await _userManager.CreateAsync(user);
-
+                var result = await _userManager.CreateAsync(user);
+                var roleResult = await _userManager.AddToRoleAsync(user, "admin");
 
 
             }
+
+            // await _signInManager.SignInAsync(user,true);
             return new string[] { name, "value1", "value2" };
         }
 
