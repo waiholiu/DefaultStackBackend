@@ -16,10 +16,17 @@ namespace mvcWithAuth.Models
         public GraphQLQuery(ApplicationDbContext _db, IHttpContextAccessor httpContext)
         {
             dbContext = _db;
-            // Field<PineappleType>(
-            //     "pineapple",
-            //     arguments: new QueryArguments(new QueryArgument<IntGraphType> { Name = "id" }),
-            //     resolve: context => dbContext.Pineapples.FirstOrDefault(p => p.Id == context <int>("id")));
+            Field<PineappleType>(
+                "pineapple",
+                arguments: new QueryArguments(new QueryArgument<IntGraphType> { Name = "id" }),
+                resolve: context => 
+                {
+                    var id = context.GetArgument<int>("id");
+                    return dbContext.Pineapples.FirstOrDefault(p => p.Id == id);
+
+                });
+
+                
 
             // Field<PlayerType>(
             //     "randomPlayer",

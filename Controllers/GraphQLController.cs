@@ -4,12 +4,14 @@ using System;
 using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.Types;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using mvcWithAuth.Models;
 
 namespace testWebAPIFB.Controllers
 {
     [Route("[controller]")] 
+    [Authorize]
     public class GraphQLController : Controller
     {
         private readonly IDocumentExecuter _documentExecuter;
