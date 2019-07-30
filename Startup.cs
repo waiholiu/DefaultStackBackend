@@ -17,6 +17,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Security.Claims;
+using GraphiQl;
+using GraphQL.Types;
+using mvcWithAuth.Models;
+using GraphQL;
 
 namespace mvcWithAuth
 {
@@ -111,6 +115,15 @@ namespace mvcWithAuth
 
             services.TryAddScoped<SignInManager<ApplicationUser>>();
 
+            services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
+            services.AddSingleton<BaseGraphQLQuery>();
+            services.AddSingleton<GraphQLQuery>();
+            services.AddSingleton<GraphQLSchema>();
+            services.AddSingleton<PineappleType>();
+            
+            var sp = services.BuildServiceProvider();
+            services.AddSingleton<ISchema>(new GraphQLSchema(new FuncDependencyResolver(type => sp.GetService(type))));
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddCors(options => options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
@@ -123,7 +136,9 @@ namespace mvcWithAuth
         {
 
             app.UseAuthentication();
+            app.UseGraphiQl();
             app.UseCors("AllowAll");
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

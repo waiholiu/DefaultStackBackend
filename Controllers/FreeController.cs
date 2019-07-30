@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace testWebAPIFB.Controllers
 {
     [Route("api/[controller]")]
+    [AllowAnonymous]
     [ApiController]
     public class FreeController : ControllerBase
     {
