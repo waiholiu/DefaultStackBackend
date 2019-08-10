@@ -119,7 +119,9 @@ namespace mvcWithAuth
             services.AddSingleton<BaseGraphQLQuery>();
             services.AddSingleton<GraphQLQuery>();
             services.AddSingleton<GraphQLSchema>();
+            services.AddSingleton<GraphQLMutation>();
             services.AddSingleton<PineappleType>();
+            services.AddSingleton<PineappleInputType>();
             
             var sp = services.BuildServiceProvider();
             services.AddSingleton<ISchema>(new GraphQLSchema(new FuncDependencyResolver(type => sp.GetService(type))));

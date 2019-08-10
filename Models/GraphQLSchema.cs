@@ -9,7 +9,7 @@ namespace mvcWithAuth.Models
         public GraphQLSchema(IDependencyResolver resolver): base(resolver)
         {
             Query = resolver.Resolve<GraphQLQuery>();
-            // Mutation = resolver.Resolve<GraphQLMutation>();
+            Mutation = resolver.Resolve<GraphQLMutation>();
         }
     }
 }
