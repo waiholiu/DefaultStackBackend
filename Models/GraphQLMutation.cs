@@ -1,7 +1,9 @@
-﻿ 
+﻿
 
+using System.Security.Claims;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using mvcWithAuth.Data;
 
 namespace mvcWithAuth.Models
@@ -10,9 +12,9 @@ namespace mvcWithAuth.Models
     {
         private readonly ApplicationDbContext dbContext;
 
-        public GraphQLMutation(ApplicationDbContext _db, IHttpContextAccessor httpContext)
+        public GraphQLMutation(ApplicationDbContext _db, IHttpContextAccessor httpContext, UserManager<ApplicationUser> userManager)
         {
-            Name = "CreatePlayerMutation";
+            Name = "Mutations";
 
             Field<PineappleType>(
                 "createPineapple",
@@ -22,15 +24,9 @@ namespace mvcWithAuth.Models
                 resolve: context =>
                 {
                     var newPineapple = context.GetArgument<Pineapple>("pineapple");
-                    // player.ApplicationUserId = httpContext.HttpContext.Principal.claim.User.
-
-                    // var name = ctx.Principal.Claims.First(c => c.Type == "user_id").Value;
-
-                    //         //Get userManager out of DI
-                    //         var _userManager = ctx.HttpContext.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
-
-                    //         // retrieves the roles that the user has
-                    //         ApplicationUser user = await _userManager.FindByNameAsync(name);
+                    var userId = httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    var user = userManager.FindByNameAsync(userId).Result;
+                    newPineapple.ApplicationUserId = user.Id;
 
                     _db.Pineapples.Add(newPineapple);
                     _db.SaveChanges();
