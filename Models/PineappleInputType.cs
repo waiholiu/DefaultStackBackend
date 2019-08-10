@@ -1,6 +1,7 @@
 ﻿ 
 
 using GraphQL.Types;
+using mvcWithAuth.Data;
 
 namespace mvcWithAuth.Models
 {
