@@ -1,6 +1,9 @@
 ﻿
 
+using System;
+using System.Linq;
 using System.Security.Claims;
+using GraphQL;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -31,6 +34,33 @@ namespace mvcWithAuth.Models
                     _db.Pineapples.Add(newPineapple);
                     _db.SaveChanges();
                     return newPineapple;
+
+                });
+
+            Field<BooleanGraphType>(
+                "deletePineapple",
+                arguments: new QueryArguments(
+                    new QueryArgument<IntGraphType> { Name = "pineappleId" }
+                ),
+                resolve: context =>
+                {
+                    var pineappleId = context.GetArgument<int>("pineappleId");
+                    // var userId = httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    // var user = userManager.FindByNameAsync(userId).Result;
+                    // newPineapple.ApplicationUserId = user.Id;
+
+                    var deletingPineapple = _db.Pineapples.FirstOrDefault(p => p.Id == pineappleId);
+                    if(deletingPineapple == null)
+                        throw new ExecutionError("pineapple does not exist");
+
+                    _db.Pineapples.Remove(deletingPineapple);
+                    _db.SaveChanges();
+
+                    // _db.SaveChanges();
+                    // return newPineapple;
+
+                    Console.WriteLine("deleted");
+                    return true;
 
                 });
         }

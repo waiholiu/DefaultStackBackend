@@ -11,7 +11,7 @@ using mvcWithAuth.Models;
 namespace testWebAPIFB.Controllers
 {
     [Route("[controller]")] 
-    [Authorize]
+    // [Authorize]
     public class GraphQLController : Controller
     {
         private readonly IDocumentExecuter _documentExecuter;
