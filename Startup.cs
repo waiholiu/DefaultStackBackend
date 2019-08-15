@@ -64,7 +64,6 @@ namespace mvcWithAuth
 
                     options.Events = new JwtBearerEvents
                     {
-
                         OnTokenValidated = async ctx =>
                         {
                             // grabs the unique id from firebase
