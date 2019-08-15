@@ -79,17 +79,9 @@ namespace mvcWithAuth
                             if (user == null)
                             {
                                 user = new ApplicationUser(name);
-                                user.Email = "fsdfas@fsda.org";
-                                user.customField = "haha";
-
-                                var newPineapple = new Pineapple()
-                                {
-                                    name = "random name of things " + name
-                                };
-                                user.Pineapples = new List<Pineapple>();
-                                user.Pineapples.Add(newPineapple);
+                                
                                 var result = await _userManager.CreateAsync(user);
-                                var roleResult = await _userManager.AddToRoleAsync(user, "admin");
+                                // var roleResult = await _userManager.AddToRoleAsync(user, "admin");
 
                             }
 
@@ -120,8 +112,6 @@ namespace mvcWithAuth
             services.AddSingleton<GraphQLQuery>();
             services.AddSingleton<GraphQLSchema>();
             services.AddSingleton<GraphQLMutation>();
-            services.AddSingleton<PineappleType>();
-            services.AddSingleton<PineappleInputType>();
             services.AddSingleton<ApplicationUserType>();
             
             var sp = services.BuildServiceProvider();

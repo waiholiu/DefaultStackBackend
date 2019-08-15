@@ -19,50 +19,55 @@ namespace mvcWithAuth.Models
         {
             Name = "Mutations";
 
-            Field<PineappleType>(
-                "createPineapple",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<PineappleInputType>> { Name = "pineapple" }
-                ),
-                resolve: context =>
-                {
-                    var newPineapple = context.GetArgument<Pineapple>("pineapple");
-                    var userId = httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                    var user = userManager.FindByNameAsync(userId).Result;
-                    newPineapple.ApplicationUserId = user.Id;
+            Field<StringGraphType>(
+                "testingMigration",
 
-                    _db.Pineapples.Add(newPineapple);
-                    _db.SaveChanges();
-                    return newPineapple;
+                resolve: context => "migration graphql works"
+            );
+            // Field<PineappleType>(
+            //     "createPineapple",
+            //     arguments: new QueryArguments(
+            //         new QueryArgument<NonNullGraphType<PineappleInputType>> { Name = "pineapple" }
+            //     ),
+            //     resolve: context =>
+            //     {
+            //         var newPineapple = context.GetArgument<Pineapple>("pineapple");
+            //         var userId = httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            //         var user = userManager.FindByNameAsync(userId).Result;
+            //         newPineapple.ApplicationUserId = user.Id;
 
-                });
+            //         _db.Pineapples.Add(newPineapple);
+            //         _db.SaveChanges();
+            //         return newPineapple;
 
-            Field<BooleanGraphType>(
-                "deletePineapple",
-                arguments: new QueryArguments(
-                    new QueryArgument<IntGraphType> { Name = "pineappleId" }
-                ),
-                resolve: context =>
-                {
-                    var pineappleId = context.GetArgument<int>("pineappleId");
-                    // var userId = httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                    // var user = userManager.FindByNameAsync(userId).Result;
-                    // newPineapple.ApplicationUserId = user.Id;
+            //     });
 
-                    var deletingPineapple = _db.Pineapples.FirstOrDefault(p => p.Id == pineappleId);
-                    if(deletingPineapple == null)
-                        throw new ExecutionError("pineapple does not exist");
+            // Field<BooleanGraphType>(
+            //     "deletePineapple",
+            //     arguments: new QueryArguments(
+            //         new QueryArgument<IntGraphType> { Name = "pineappleId" }
+            //     ),
+            //     resolve: context =>
+            //     {
+            //         var pineappleId = context.GetArgument<int>("pineappleId");
+            //         // var userId = httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            //         // var user = userManager.FindByNameAsync(userId).Result;
+            //         // newPineapple.ApplicationUserId = user.Id;
 
-                    _db.Pineapples.Remove(deletingPineapple);
-                    _db.SaveChanges();
+            //         var deletingPineapple = _db.Pineapples.FirstOrDefault(p => p.Id == pineappleId);
+            //         if(deletingPineapple == null)
+            //             throw new ExecutionError("pineapple does not exist");
 
-                    // _db.SaveChanges();
-                    // return newPineapple;
+            //         _db.Pineapples.Remove(deletingPineapple);
+            //         _db.SaveChanges();
 
-                    Console.WriteLine("deleted");
-                    return true;
+            //         // _db.SaveChanges();
+            //         // return newPineapple;
 
-                });
+            //         Console.WriteLine("deleted");
+            //         return true;
+
+            //     });
         }
     }
 }

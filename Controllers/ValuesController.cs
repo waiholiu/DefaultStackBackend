@@ -39,28 +39,28 @@ namespace testWebAPIFB.Controllers
         
         public async Task<ActionResult<IEnumerable<string>>> GetAsync()
         {
-            var name = _contextAccessor.HttpContext.User.Claims.First(c => c.Type == "user_id").Value;
+            // var name = _contextAccessor.HttpContext.User.Claims.First(c => c.Type == "user_id").Value;
 
-            var newPine = new Pineapple();
-            newPine.name = "my new pineapple";
-            db.Pineapples.Add(newPine);
-            db.SaveChanges();
+            // var newPine = new Pineapple();
+            // newPine.name = "my new pineapple";
+            // db.Pineapples.Add(newPine);
+            // db.SaveChanges();
 
-            var role = "admin";
-            if (!await _roleManager.RoleExistsAsync(role))
-            {
-                var create = await _roleManager.CreateAsync(new IdentityRole(role));
+            // var role = "admin";
+            // if (!await _roleManager.RoleExistsAsync(role))
+            // {
+            //     var create = await _roleManager.CreateAsync(new IdentityRole(role));
 
-                if (!create.Succeeded)
-                {
-                    throw new Exception("Failed to create role");
-                }
-            }
+            //     if (!create.Succeeded)
+            //     {
+            //         throw new Exception("Failed to create role");
+            //     }
+            // }
 
-            ApplicationUser user = await _userManager.FindByNameAsync(name);
+            // ApplicationUser user = await _userManager.FindByNameAsync(name);
 
             // await _signInManager.SignInAsync(user,true);
-            return new string[] { user.Email, "value1", "value2" };
+            return new string[] { "value1", "value2" };
         }
 
         // GET api/values/5

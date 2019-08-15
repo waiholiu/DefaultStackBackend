@@ -13,6 +13,5 @@ namespace mvcWithAuth.Data
         {
         }
 
-        public DbSet<Pineapple> Pineapples {set;get;}
     }
 }
